@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchForm from "./components/SearchForm";
 import AddUser from "./components/AddUser";
 import ResultTable from "./components/ResultTable";
-import { initialUsers } from "./data/users";
 import "./App.css";
 
 /**
@@ -12,17 +11,34 @@ import "./App.css";
  */
 function App() {
   // State chính lưu trữ toàn bộ danh sách users
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState([]);
   // State lưu danh sách users đã được lọc theo từ khóa tìm kiếm
-  const [filteredUsers, setFilteredUsers] = useState(initialUsers);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  // State loading để hiển thị trạng thái đang tải dữ liệu
+  const [loading, setLoading] = useState(true);
 
-  // Hàm xử lý tìm kiếm - Lọc users theo name, email hoặc phone
+  // useEffect: Tải dữ liệu từ API khi component mount (chạy 1 lần)
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((data) => {
+        setUsers(data);
+        setFilteredUsers(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi tải dữ liệu:", error);
+        setLoading(false);
+      });
+  }, []); // Dependency array rỗng = chỉ chạy 1 lần khi mount
+
+  // Hàm xử lý tìm kiếm - Lọc users theo name, username, email
   const handleSearch = (searchTerm) => {
     const filtered = users.filter(
       (user) =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.phone.includes(searchTerm)
+        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredUsers(filtered);
   };
@@ -60,13 +76,21 @@ function App() {
   return (
     <div className="app-container">
       <h1>Quản lý Người dùng</h1>
-      <SearchForm onSearch={handleSearch} />
-      <AddUser onAddUser={handleAddUser} />
-      <ResultTable
-        users={filteredUsers}
-        onDeleteUser={handleDeleteUser}
-        onEditUser={handleEditUser}
-      />
+      {loading ? (
+        <p style={{ textAlign: "center", fontSize: "18px", marginTop: "50px" }}>
+          Đang tải dữ liệu...
+        </p>
+      ) : (
+        <>
+          <SearchForm onSearch={handleSearch} />
+          <AddUser onAddUser={handleAddUser} />
+          <ResultTable
+            users={filteredUsers}
+            onDeleteUser={handleDeleteUser}
+            onEditUser={handleEditUser}
+          />
+        </>
+      )}
     </div>
   );
 }

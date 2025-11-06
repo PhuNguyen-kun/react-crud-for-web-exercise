@@ -115,39 +115,3 @@
 .btn-cancel:hover {
   background-color: #666;
 }
-
-.btn-edit {
-  background-color: #ffa500;
-  color: white;
-}
-
-.btn-edit:hover {
-  background-color: #ff8c00;
-}
-
-.btn-delete {
-  background-color: #f44336;
-  color: white;
-}
-
-.btn-delete:hover {
-  background-color: #da190b;
-}
-
-.btn-save {
-  background-color: #4caf50;
-  color: white;
-}
-
-.btn-save:hover {
-  background-color: #45a049;
-}
-
-.btn-cancel {
-  background-color: #888;
-  color: white;
-}
-
-.btn-cancel:hover {
-  background-color: #666;
-}

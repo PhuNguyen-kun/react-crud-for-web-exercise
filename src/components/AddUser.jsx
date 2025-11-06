@@ -9,8 +9,11 @@ function AddUser({ onAddUser }) {
   // State lưu dữ liệu form
   const [formData, setFormData] = useState({
     name: "",
+    username: "",
     email: "",
-    phone: "",
+    address: {
+      city: "",
+    },
   });
 
   // State điều khiển hiển thị/ẩn form
@@ -18,18 +21,27 @@ function AddUser({ onAddUser }) {
 
   // Xử lý thay đổi input - Cập nhật state theo tên trường
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    if (name === "city") {
+      // Xử lý nested object cho address
+      setFormData({
+        ...formData,
+        address: { ...formData.address, city: value },
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   // Xử lý submit form - Validate và gọi callback từ component cha
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.name && formData.email && formData.phone) {
+    if (formData.name && formData.username && formData.email) {
       onAddUser(formData); // Truyền dữ liệu lên component cha
-      setFormData({ name: "", email: "", phone: "" }); // Reset form
+      setFormData({ name: "", username: "", email: "", address: { city: "" } }); // Reset form
       setShowForm(false); // Ẩn form sau khi thêm thành công
     }
   };
@@ -57,6 +69,16 @@ function AddUser({ onAddUser }) {
             />
           </div>
           <div className="form-group">
+            <label>Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
             <label>Email:</label>
             <input
               type="email"
@@ -67,11 +89,11 @@ function AddUser({ onAddUser }) {
             />
           </div>
           <div className="form-group">
-            <label>Số điện thoại:</label>
+            <label>Thành phố:</label>
             <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
+              type="text"
+              name="city"
+              value={formData.address.city}
               onChange={handleChange}
               required
             />

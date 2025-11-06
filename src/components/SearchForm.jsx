@@ -22,21 +22,23 @@ function SearchForm({ onSearch }) {
   };
 
   return (
-    <form className="search-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Tìm kiếm theo tên, email hoặc số điện thoại..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="search-input"
-      />
-      <button type="submit" className="btn btn-search">
-        Tìm kiếm
-      </button>
-      <button type="button" onClick={handleReset} className="btn btn-reset">
-        Reset
-      </button>
-    </form>
+    <div className="search-form-container">
+      <form className="search-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Tìm kiếm theo tên, username, email"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+        <button type="submit" className="btn btn-search">
+          Tìm kiếm
+        </button>
+        <button type="button" onClick={handleReset} className="btn btn-reset">
+          Reset
+        </button>
+      </form>
+    </div>
   );
 }
 

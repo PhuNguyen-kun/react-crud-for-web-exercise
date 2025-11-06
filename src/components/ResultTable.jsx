@@ -47,8 +47,9 @@ function ResultTable({ users, onDeleteUser, onEditUser }) {
             <tr>
               <th>ID</th>
               <th>Họ tên</th>
+              <th>Username</th>
               <th>Email</th>
-              <th>Số điện thoại</th>
+              <th>Thành phố</th>
               <th>Thao tác</th>
             </tr>
           </thead>
@@ -70,6 +71,14 @@ function ResultTable({ users, onDeleteUser, onEditUser }) {
                     </td>
                     <td>
                       <input
+                        type="text"
+                        name="username"
+                        value={editFormData.username}
+                        onChange={handleEditChange}
+                      />
+                    </td>
+                    <td>
+                      <input
                         type="email"
                         name="email"
                         value={editFormData.email}
@@ -78,10 +87,18 @@ function ResultTable({ users, onDeleteUser, onEditUser }) {
                     </td>
                     <td>
                       <input
-                        type="tel"
-                        name="phone"
-                        value={editFormData.phone}
-                        onChange={handleEditChange}
+                        type="text"
+                        name="city"
+                        value={editFormData.address?.city || ""}
+                        onChange={(e) => {
+                          setEditFormData({
+                            ...editFormData,
+                            address: {
+                              ...editFormData.address,
+                              city: e.target.value,
+                            },
+                          });
+                        }}
                       />
                     </td>
                     <td>
@@ -104,8 +121,9 @@ function ResultTable({ users, onDeleteUser, onEditUser }) {
                   <>
                     <td>{user.id}</td>
                     <td>{user.name}</td>
+                    <td>{user.username}</td>
                     <td>{user.email}</td>
-                    <td>{user.phone}</td>
+                    <td>{user.address?.city || "N/A"}</td>
                     <td>
                       <button
                         className="btn btn-edit"
